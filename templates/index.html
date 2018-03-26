@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv='refresh' content='15'>
+<head>
+    <meta charset="utf-8">
+     <script src="{{ url_for('static', filename='Chart.min.js') }}"></script> 
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Create two equal columns that floats next to each other */
+    .column0 {
+        float: left;
+        width: 25%;
+        padding: 10px;
+        height: 300px; /* Should be removed. Only for demonstration */
+    }
+    .column1 {
+        float: left;
+        width: 75%;
+        padding: 10px;
+        height: 300px; /* Should be removed. Only for demonstration */
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    </style>
+
+
+</head>
+
+<body style="background-color:rgb(234, 234, 234); color: #c9cecf;">
+ 
+    <div style="text-align: center; font-family: Arial, Helvetica, sans-serif; font-size: 20px; color:#B5BABB; padding-top: 40px; padding-bottom: 40px">
+
+        <h1 style="font-size: 80px;font-family: Arial, Helvetica, sans-serif; color: #B5BABB">CHESTNUT</h1>
+
+
+
+        <div class="column0" >
+            
+            <h1 style="font-size: 45px; color: rgb(255,0,0);">Last Ten activity</h1>
+
+            <table align="center">
+                
+                <tr style="font-size: 25px; color:#c9cecf;">
+                    <th>&nbsp&nbspNAME&nbsp&nbsp</th>
+                    <th>&nbsp&nbspTIME&nbsp&nbsp</th>
+                </tr>
+
+                {% for i in data %}
+                <tr style="color: black;">
+                    <td>&nbsp&nbsp{{ i[0] }}&nbsp&nbsp</td>
+                    <td>&nbsp&nbsp{{ i[1] }}&nbsp&nbsp</td>
+                </tr>
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+        <div class="column1">
+            <h1 style="color: rgb(255,0,0);">Chart</h1>    
+            <canvas id="chart" width='1200' height="400"></canvas>
+            <script>
+               // bar chart data
+               var barData = {
+               labels : [{% for item in labels %}
+                              "{{item}}",
+                          {% endfor %}],
+               datasets : [
+                  {
+                        fillColor: "rgba(255,0,0,0.8)",
+                        strokeColor: "rgba(255,0,0,1)",
+                        pointColor: "rgba(255,0,0,1)",
+                     data : [{% for item in emp %}
+                                  {{item}},
+                                {% endfor %}]
+                  }
+                  ]
+               }
+             
+               // get bar chart canvas
+               var mychart = document.getElementById("chart").getContext("2d");
+             
+               steps = 10
+               max = 10
+               // draw bar chart
+               new Chart(mychart).Bar(barData, {
+                    scaleOverride: true,
+                    scaleSteps: steps,
+                    scaleStepWidth: Math.ceil(max / steps),
+                    scaleStartValue: 0,
+                    scaleShowVerticalLines: true,
+                    scaleShowGridLines : true,
+                    barShowStroke : true,
+                    scaleShowLabels: true
+               });
+             
+            </script>            
+        </div>
+
+    </div>
+
+
+    
+</body>
+
+</html>
